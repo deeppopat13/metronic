@@ -1,0 +1,160 @@
+﻿@{
+    ViewData["Title"] = "Contact Add/Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model metronic.Areas.Contact.Models.ContactModel
+<div class="row">
+    <div class="col-md-12">
+        <h3>@TempData["ContactInsertMsg"]</h3>
+        <form method="post" asp-controller="Contact" asp-action="Save" asp-area="Contact" enctype="multipart/form-data">
+
+            @Html.HiddenFor(x => x.ContactID);
+            @Html.HiddenFor(x => x.PhotoPath);
+            @{
+                if(TempData["PhotoPath"] !=null)
+                {
+                    <div class="form-group mb-3 text-center">
+                        <img src="@Url.Content(TempData["PhotoPath"].ToString())" class="rounded-circle shadow" width="150px" alt="#IMG"/>
+                    </div>
+                }
+            }
+             <div class="form-group">
+                <label>Photo Path</label>
+                <input type="file" class="form-control" asp-for="File" placeholder="Upload File" />
+            </div>
+            <div class="form-group">
+
+            <label>Country Name</label>
+                <select class="form-control" asp-for="CountryID" asp-items="@(new SelectList(ViewBag.CountryList,"CountryID","CountryName"))" onchange="fnOnStateChange()">
+                <option value="Select Country"></option>
+            </select>
+    </div>
+    <div class="form-group">
+        <label>State Name</label>
+                <select class="form-control" asp-for="StateID" asp-items="@(new SelectList(ViewBag.StateList,"StateID","StateName"))" onchange="fnOnCityChange()">
+            <option value="Select State"></option>
+        </select>
+    </div>
+            <div class="form-group">
+                <label>City Name</label>
+                <select class="form-control" asp-for="CityID" asp-items="@(new SelectList(ViewBag.CityList,"CityID","CityName"))">
+                    <option value="Select City"></option>
+                   
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <select class="form-control" asp-for="CategoryID" asp-items="@(new SelectList(ViewBag.ContactCategoryList,"CategoryID","Category"))">
+                    <option value="Select Category"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Contact Name</label>
+                <input type="text" class="form-control" asp-for="ContactName" placeholder="Enter Contact Name" />
+                <span asp-validation-for="ContactName" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+                <label>Contact Mobile</label>
+                <input type="number" class="form-control" asp-for="ContactMobile" placeholder="Enter Contact Mobile" />
+            </div>
+            <div class="form-group">
+                <label>Contact Address</label>
+                <input type="text" class="form-control" asp-for="ContactAddress" placeholder="Enter Contact Address" />
+            </div>
+            <div class="form-group">
+                <label>Contact Pincode</label>
+                <input type="number" class="form-control" asp-for="ContactPincode" placeholder="Enter Contact Pincode" />
+            </div>
+            <div class="form-group">
+                <label>Contact Email</label>
+                <input type="text" class="form-control" asp-for="ContactEmail" placeholder="Enter Contact Email" />
+                <span asp-validation-for="ContactEmail" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Creation Date</label>
+                <input type="date" class="form-control" asp-for="CreationDate" />
+            </div>
+            <div class="form-group">
+                <label>Modification Date</label>
+                <input type="date" class="form-control" asp-for="ModificationDate" />
+            </div>
+           
+            <hr />
+            <input type="submit" class="btn btn-success" />
+        </form>
+    </div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+
+    }
+}
+<script>
+    function fnOnStateChange() {
+        var CountryID = $("#CountryID").val();
+        
+        if (CountryID !== "") {
+            $("#StateID").empty();
+            $("#StateID").append($("<option></option>").val("").html("Select State"));
+            $.ajax(
+                {
+                    type: "Post",
+                    contentType: "application/json; charset=ytf-8",
+                    url: "@Url.Action("DropDownByCountry","LOC_City")" + "?&CountryID=" + CountryID,
+                    data: {},
+                    dataType: "json",
+                    success: function (Result) {
+                        $.each(Result,
+                            function (key, value) {
+                                $("#StateID").append($("<option></option>").val(value.stateID).html(value.stateName));
+                            }
+                        );
+                    },
+                    error: function (r) {
+                        alert("Error while loading DropDown.")
+                    }
+                }
+            );
+        }
+        else{
+            $("#StateID").empty();
+            $("#StateID").append($("<option></option>").val("").html("Select State"));
+        }
+        
+    }
+    function fnOnCityChange() {
+        var StateID = $("#StateID").val();
+       
+        if (StateID !== "") {
+            $("#CityID").empty();
+            $("#CityID").append($("<option></option>").val("").html("Select City"));
+            $.ajax(
+                {
+                    type: "Post",
+                    contentType: "application/json; charset=ytf-8",
+                    url: "@Url.Action("DropDownByState","Contact")" + "?&StateID=" + StateID,
+                    data: {},
+                    dataType: "json",
+                    success: function (Result) {
+                        $.each(Result,
+                            function (key, value) {
+                                $("#CityID").append($("<option></option>").val(value.cityID).html(value.cityName));
+                            }
+                        );
+                    },
+                    error: function (r) {
+                        alert("Error while loading DropDown.")
+                    }
+                }
+            );
+        }
+        else {
+            $("#CityID").empty();
+            $("#CityID").append($("<option></option>").val("").html("Select City"));
+        }
+
+    }
+</script>
+

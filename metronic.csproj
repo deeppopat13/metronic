@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EnterpriseLibrary.Data.NetCore" Version="6.3.2" />
+    <PackageReference Include="EnterpriseLibrary.TransientFaultHandling.Data.NetCore" Version="6.0.1312" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.12" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Contact\Data\" />
+    <Folder Include="Areas\LOC_City\Data\" />
+    <Folder Include="Areas\LOC_ContactCategory\Data\" />
+    <Folder Include="Areas\LOC_Country\Data\" />
+    <Folder Include="Areas\LOC_State\Data\" />
+    <Folder Include="Views\Contact\" />
+    <Folder Include="Views\LOC_City\" />
+    <Folder Include="Views\LOC_ContactCategory\" />
+    <Folder Include="Views\LOC_Country\" />
+    <Folder Include="Views\LOC_State\" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "ContactCategory Add/Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model metronic.Areas.LOC_ContactCategory.Models.LOC_ContactCategoryModel
+<div class="row">
+    <div class="col-md-12">
+        <h3>@TempData["ContactCategoryInsertMsg"]</h3>
+        <form method="post" asp-controller="LOC_ContactCategory" asp-action="Save" asp-area="LOC_ContactCategory">
+            @Html.HiddenFor(x => x.CategoryID);
+            <div class="form-group">
+                <label>Category</label>
+                <input type="text" class="form-control" asp-for="Category" placeholder="Enter C" />
+                 <span asp-validation-for="Category" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Creation Date</label>
+                <input type="date" class="form-control" asp-for="CreationDate" />
+            </div>
+            <div class="form-group">
+                <label>Modification Date</label>
+                <input type="date" class="form-control" asp-for="ModificationDate" />
+            </div>
+            <hr />
+            <input type="submit" class="btn btn-success" />
+        </form>
+    </div>
+</div>
+@section Scripts
+    {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }
+

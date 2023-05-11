@@ -1,0 +1,86 @@
+﻿@using System.Data
+@model DataTable
+
+<h3>City List</h3>
+<a asp-controller="LOC_City" asp-action="Add" asp-area="LOC_City">Add City</a>
+<div class="pull-right">
+    <div id="sample_1_filter" class="dataTables_filter">
+        <label>Search&nbsp;<input type="text" class="form-control input-sm input-small input-inline" placeholder="" id="sample_1" aria-controls="sample_1" /></label>
+    </div>
+
+</div>
+<form method="post" asp-controller="LOC_City" asp-action="Filter" asp-area="LOC_City">
+    <div class="row mt-5">
+        <div class="col">
+            <input type="text" name="CityCode" class="form-control" placeholder="City Code" />
+        </div>
+        <div class="col">
+            <input type="text" name="CityName" class="form-control" placeholder="City Name" />
+        </div>
+        <div class="col-2">
+            <input type="submit" class="form-control btn btn-primary" value="Search" />
+        </div>
+        <div class="col-2">
+            <input type="reset" class="form-control btn btn-secondary" value="Clear" />
+        </div>
+    </div>
+</form>
+<table class="table table-responsive table-sm">
+    <thead>
+        <tr>
+            
+            <th>StateName</th>
+            <th>CityName</th>
+            <th>CityCode</th>
+            <th>CreationDate</th>
+            <th>ModificationDate</th>
+            <td>Actions</td>
+        </tr>
+    </thead>
+    <tbody id="sample_2">
+        @foreach (DataRow dr in Model.Rows)
+        {
+            <tr>
+                <td>@dr["CityID"]</td>
+                <td>@dr["StateName"]</td>
+                <td>@dr["CityName"]</td>
+                <td>@dr["CityCode"]</td>
+                <td>@Convert.ToDateTime(dr["CreationDate"])</td>
+                <td>@Convert.ToDateTime(dr["ModificationDate"])</td>
+                <td style="display:flex;flex-direction:row">
+                    <form method="post" asp-controller="LOC_City" asp-action="Add" asp-area="LOC_City">
+                        <input type="hidden" name="CityID" value="@Convert.ToInt32(dr["CityID"])">
+                        <button type="submit" class="btn btn-danger"><i class="bi bi-pen"></i></button>
+                    </form>
+                    <form method="post" asp-controller="LOC_City" asp-action="Delete" asp-area="LOC_City" onsubmit="return showAlert();">
+                        <input type="hidden" name="CityID" value="@Convert.ToInt32(dr["CityID"])">
+                        <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts
+    {
+    <script>
+        $(document).ready(function () {
+            $("#sample_1").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#sample_2 tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+
+            });
+        });
+        function fun1() {
+            if (confirm("Are you sure you want to delete")) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    </script>
+}
+
